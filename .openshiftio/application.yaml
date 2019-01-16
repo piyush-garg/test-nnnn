@@ -37,6 +37,16 @@ objects:
       labels:
         version: '${RELEASE_VERSION}'
     spec: {}
+  - apiVersion: v1	
+    kind: ImageStream	
+    metadata:
+      name: runtime	
+    spec:
+      tags:
+        - name: latest	
+          from:
+            kind: DockerImage	
+            name: 'registry.access.redhat.com/rhoar-nodejs/nodejs-10:latest'
   - apiVersion: v1
     kind: BuildConfig
     metadata:
@@ -59,8 +69,8 @@ objects:
         type: Source
         sourceStrategy:
           from:
-            kind: DockerImage
-            name: 'nodeshift/centos7-s2i-nodejs:10.x'
+            kind: ImageStreamTag
+            name: 'runtime:latest'
           incremental: true
       triggers:
         - github:
